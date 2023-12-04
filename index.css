@@ -1,0 +1,89 @@
+
+
+     * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: url('background.jpg');
+    
+    
+    }
+    
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 100px;
+        background: rgba(37, 42, 38, 0.759);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 99;
+    
+    }
+    
+    .texte {
+        color: #000000;
+        font-family: 'Poppins';
+        font-size: 3em;
+        border: 2px solid #000; /* Couleur de la bordure */
+        padding: 20px; /* Espace intérieur du cadre */
+        margin: 20px; /* Espace extérieur du cadre */
+        width: 60%; /* Largeur du cadre */
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1); /* Ombre */
+        border-radius: 10px; /* Coins arrondis */
+        background-color: rgba(255, 255, 255, 0.8); /* Fond avec transparence */
+        text-align: center; /* Centrer le texte */
+        .a {
+            color: #000000;
+            font-family: 'Poppins';
+        }
+    }
+    .logo {
+        font-size: 2em;
+        color: aliceblue;
+        user-select: none;
+    }
+    
+    .navigation a {
+        position: relative;
+        font-size: 1.1em;
+        color: aliceblue;
+        text-decoration: none;
+        font-weight: 500;
+        margin-left: 40px;
+    
+    
+    }
+    
+    .navigation a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -6px;
+        width: 100%;
+        height: 3px;
+        background: #fff;
+        border-radius: 5px;
+        transform-origin: right;
+        transform: scaleX(0);
+        transition: transform .5s;
+    
+    }
+    
+    .navigation a:hover::after {
+        transform-origin: left;
+        transform: scaleX(1);
+    
+    }
+    
+
