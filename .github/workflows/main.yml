@@ -31,7 +31,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           
-          END
+         
             
 # connexion a la VM en ssh et Git pull dans la foulée
       - name: "Connexion SSH et git pull"
