@@ -20,6 +20,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY}}
           SSH_HOST: ${{ secrets.SSH_HOST}}
           SSH_USER: ${{ secrets.SSH_USER}}
+          
         run : |
           # Création dossier ~/.ssh sur la VM
           mkdir -p ~/.ssh/
@@ -38,6 +39,7 @@ jobs:
         env : 
           SSH_HOST: ${{ secrets.SSH_HOST}}
           SSH_USER: ${{ secrets.SSH_USER}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
         run : |
           ssh $SSH_USER@SSH_HOST 'cd /var/www/html/anglais && git fetch && git pull' 
           
