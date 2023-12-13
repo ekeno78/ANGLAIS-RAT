@@ -1,0 +1,52 @@
+# Nom du workflows
+name : "Déploiement auto suite à un push sur la branche master"
+
+# trigger a chaque push sur la branche master
+on:
+  push:
+    branches:
+    - master
+jobs:
+# création instance ubuntu
+  creation-vm: 
+    name : "Création d'une instance de Ubuntu"
+    runs-on: ubuntu-latest
+
+    steps : 
+      # ajout de la clé pv de l'user github
+      - name: "Création clé SSh"
+        env : 
+        # récupération des variables d'environnement
+          SSH_KEY: ${{ secrets.SSH_KEY}}
+          SSH_HOST: ${{ secrets.SSH_HOST}}
+          SSH_USER: ${{ secrets.SSH_USER}}
+          
+        run : |
+          # Création dossier ~/.ssh sur la VM
+          mkdir -p ~/.ssh/
+          
+          # Ajout de la clé pv dans le fichier 
+          echo "$SSH_KEY" >> ~/.ssh/id_rsa
+
+          # Le fichier id_rsa doit avoir les bons droits
+          chmod 600 ~/.ssh/id_rsa
+
+          
+         
+            
+# connexion a la VM en ssh et Git pull dans la foulée
+      - name: "Connexion SSH et git pull"
+        env : 
+          SSH_HOST: ${{ secrets.SSH_HOST}}
+          SSH_USER: ${{ secrets.SSH_USER}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
+        run : |
+          ssh $SSH_USER@SSH_HOST 'cd /var/www/html/anglais && git fetch && git pull' 
+          
+          
+
+
+
+
+
+# git pull
