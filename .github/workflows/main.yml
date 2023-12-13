@@ -1,58 +1,43 @@
-# Nom pour ce workflow
-name: "Déploiement auto suite à un push sur la branche master"
+# nom workflow
+name: "Déploiement auto push branche main"
 
-# ----------------------------------------------------------
-# Trigger sur push sur la branche master
-on:
-  push:
-    branches:
+# Trigger
+on: 
+  push: 
+    branches: 
       - main
 
-# ----------------------------------------------------------
+# créer instance Ubuntu
 jobs:
-  # Création de la VM Ubuntu
   creation-vm:
-    name: "Création d'une instance de Ubuntu"
+    name: "création d'une instance de Ubuntu"
     runs-on: ubuntu-latest
     
-    steps:
-    
-      # Ajout du jeu de clés de l'utilisateur de déploiement
-      # sur cette vm qui vient d'etre créée
-      - name: "Création du jeu de clé SSH pour l'utilisateur de déploiement"
-        # Récupération des variables d'environnement
+    steps: 
+      # ajout de la clé privé de l'utilisateur de déploiement
+      - name: "création de jeu de clé SSH pour l'utilisateur de déploiement"
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
-        run: |
-          # Création dossier ~/.ssh sur la VM
-          mkdir -p ~/.ssh/
+        run: | 
+          # création dossier /.ssh
+          mkdir -p ~/.ssh
 
-          # Ajout de la clé privée dans le fichier ~/.ssh/id_rsa
+          # ajout de la clé dans le fichier id_rsa
           echo "$SSH_KEY" > ~/.ssh/id_rsa
-
-          # Le fichier id_rsa DOIT avoir les bons droits!
           chmod 600 ~/.ssh/id_rsa
-
-          cat >>~/.ssh/config <<END
-            Host serveurProdVM
-              HostName $SSH_HOST
-              User $SSH_USER
-              Port $SSH_PORT
-              IdentityFile ~/.ssh/id_rsa
-              StrictHostKeyChecking no
-
-      # Connexion SSH ET Git pull dans la foulée
-      - name: "Connexion SSH et Git Pull"
-        run: |
-          ssh serveurProdVM 'cd /var/www/html/anglais && git fetch && git pull'
-
-
           
+          # configuration de l'hôte dans known_hosts
+          ssh-keyscan -t rsa -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-
-
-
-
+# Connexion SSH à la VM
+      - name: "Connexion SSH à la VM"
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: | 
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST 'cd /var/www/html/anglais && git fetch && git pull'
